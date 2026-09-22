@@ -8,7 +8,9 @@ use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RuntimeException;
 use SplFileInfo;
+use Throwable;
 
 final class InstallAgentsCommand extends Command
 {
@@ -16,11 +18,16 @@ final class InstallAgentsCommand extends Command
 
     private const MANAGED_BLOCK_END = '</mc-harness-ai>';
 
+    private const QUALIFICATION_SKILLS = [
+        'AGENTS.md' => '.agents/skills/mc-qualify-request/SKILL.md',
+        'CLAUDE.md' => '.claude/skills/mc-qualify-request/SKILL.md',
+    ];
+
     protected $signature = 'mc-harness-ai:install
                             {--dry-run : Affiche les opérations sans écrire de fichier}
-                            {--force : Remplace uniquement les fichiers et blocs gérés qui diffèrent}';
+                            {--force : Sauvegarde puis remplace les fichiers et blocs gérés qui diffèrent}';
 
-    protected $description = 'Installe le noyau .agents et les ponts Codex et Claude Code.';
+    protected $description = 'Installe le noyau .agents et les ponts des agents sélectionnés dans Boost.';
 
     public function __construct(private readonly Filesystem $files)
     {
@@ -38,10 +45,20 @@ final class InstallAgentsCommand extends Command
             return self::FAILURE;
         }
 
+        $instructionPaths = $this->availableInstructionPaths();
+
+        if ($instructionPaths === []) {
+            $this->error('Aucun skill mc-qualify-request de Boost trouvé. Exécutez boost:install avec les skills Codex ou Claude Code, puis relancez cette commande.');
+
+            return self::FAILURE;
+        }
+
         $operations = [
             ...$this->plannedCoreOperations($sourceDirectory, $targetDirectory),
-            $this->plannedInstructionOperation(base_path('AGENTS.md')),
-            $this->plannedInstructionOperation(base_path('CLAUDE.md')),
+            ...array_map(
+                fn (string $path): array => $this->plannedInstructionOperation(base_path($path)),
+                $instructionPaths,
+            ),
         ];
 
         $conflicts = array_filter($operations, fn (array $operation): bool => $operation['status'] === 'conflict');
@@ -49,7 +66,7 @@ final class InstallAgentsCommand extends Command
         $invalidTargets = array_filter($operations, fn (array $operation): bool => $operation['status'] === 'invalid');
 
         foreach ($operations as $operation) {
-            $status = $operation['status'] === 'conflict' && $this->option('force') ? 'replace' : $operation['status'];
+            $status = $operation['status'] === 'conflict' && $this->option('force') ? 'backup+replace' : $operation['status'];
             $this->line(sprintf('[%s] %s', $status, $operation['relativePath']));
         }
 
@@ -60,13 +77,13 @@ final class InstallAgentsCommand extends Command
         }
 
         if ($invalidTargets !== []) {
-            $this->error('Des balises de gestion sont absentes, dupliquées ou mal ordonnées. Corrigez-les manuellement.');
+            $this->error('Des cibles sont invalides ou leurs balises de gestion sont absentes, dupliquées ou mal ordonnées.');
 
             return self::FAILURE;
         }
 
         if ($conflicts !== [] && ! $this->option('force')) {
-            $this->warn('Des fichiers ou blocs gérés diffèrent. Aucun fichier ne sera remplacé sans --force.');
+            $this->warn('Des fichiers ou blocs gérés diffèrent. Utilisez --force après examen pour les sauvegarder et les remplacer.');
 
             return self::FAILURE;
         }
@@ -77,26 +94,42 @@ final class InstallAgentsCommand extends Command
             return self::SUCCESS;
         }
 
-        foreach ($operations as $operation) {
-            if ($operation['kind'] !== 'core' || $operation['status'] === 'current') {
-                continue;
-            }
+        try {
+            $writes = $this->prepareWrites($operations);
+            $backupDirectory = $this->backupConflicts($writes);
+        } catch (Throwable $exception) {
+            $this->error('Préparation interrompue : '.$exception->getMessage());
 
-            $this->files->ensureDirectoryExists(dirname($operation['targetPath']));
-            $this->files->copy($operation['sourcePath'], $operation['targetPath']);
+            return self::FAILURE;
         }
 
-        foreach ($operations as $operation) {
-            if ($operation['kind'] !== 'instruction' || $operation['status'] === 'current') {
-                continue;
-            }
-
-            $this->writeInstructionOperation($operation);
+        if (! $this->applyWrites($writes)) {
+            return self::FAILURE;
         }
 
-        $this->info('Noyau .agents et ponts Codex/Claude Code installés. Les skills sont gérés par Laravel Boost.');
+        if ($backupDirectory !== null) {
+            $this->warn('Copies précédentes conservées dans '.str_replace(base_path().DIRECTORY_SEPARATOR, '', $backupDirectory));
+        }
+
+        $this->info('Noyau .agents et ponts sélectionnés installés. Les skills sont gérés par Laravel Boost.');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function availableInstructionPaths(): array
+    {
+        $paths = [];
+
+        foreach (self::QUALIFICATION_SKILLS as $instructionPath => $skillPath) {
+            if ($this->files->isFile(base_path($skillPath))) {
+                $paths[] = $instructionPath;
+            }
+        }
+
+        return $paths;
     }
 
     /**
@@ -143,7 +176,7 @@ final class InstallAgentsCommand extends Command
             'content' => '',
         ];
 
-        if ($this->files->isLink($targetPath)) {
+        if (is_link($targetPath)) {
             $operation['status'] = 'link';
 
             return $operation;
@@ -189,18 +222,9 @@ final class InstallAgentsCommand extends Command
         return $operation;
     }
 
-    /**
-     * @param array{kind: string, targetPath: string, relativePath: string, status: string, content: string} $operation
-     */
-    private function writeInstructionOperation(array $operation): void
-    {
-        $this->files->ensureDirectoryExists(dirname($operation['targetPath']));
-        $this->files->put($operation['targetPath'], $operation['content']);
-    }
-
     private function coreOperationStatus(string $sourcePath, string $targetPath): string
     {
-        if ($this->files->isLink($targetPath)) {
+        if ($this->hasLinkedAncestor($targetPath)) {
             return 'link';
         }
 
@@ -216,6 +240,126 @@ final class InstallAgentsCommand extends Command
             (string) hash_file('sha256', $sourcePath),
             (string) hash_file('sha256', $targetPath),
         ) ? 'current' : 'conflict';
+    }
+
+    private function hasLinkedAncestor(string $path): bool
+    {
+        $root = rtrim(base_path(), DIRECTORY_SEPARATOR);
+        $current = $path;
+
+        while (str_starts_with($current, $root.DIRECTORY_SEPARATOR)) {
+            if (is_link($current)) {
+                return true;
+            }
+
+            $current = dirname($current);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array<int, array<string, string>> $operations
+     * @return array<int, array{targetPath: string, relativePath: string, status: string, content: string, original: ?string}>
+     */
+    private function prepareWrites(array $operations): array
+    {
+        $writes = [];
+
+        foreach ($operations as $operation) {
+            if ($operation['status'] === 'current') {
+                continue;
+            }
+
+            $targetPath = $operation['targetPath'];
+            $writes[] = [
+                'targetPath' => $targetPath,
+                'relativePath' => $operation['relativePath'],
+                'status' => $operation['status'],
+                'content' => $operation['kind'] === 'core'
+                    ? $this->files->get($operation['sourcePath'])
+                    : $operation['content'],
+                'original' => $this->files->exists($targetPath) ? $this->files->get($targetPath) : null,
+            ];
+        }
+
+        return $writes;
+    }
+
+    /**
+     * @param array<int, array{targetPath: string, relativePath: string, status: string, content: string, original: ?string}> $writes
+     */
+    private function backupConflicts(array $writes): ?string
+    {
+        $conflicts = array_filter($writes, fn (array $write): bool => $write['status'] === 'conflict');
+
+        if ($conflicts === []) {
+            return null;
+        }
+
+        $directory = base_path('.mc-harness-ai/backups/'.gmdate('Ymd-His').'-'.bin2hex(random_bytes(4)));
+
+        foreach ($conflicts as $write) {
+            $path = $directory.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $write['relativePath']);
+            $this->writeChecked($path, $write['original'] ?? '');
+        }
+
+        return $directory;
+    }
+
+    /**
+     * @param array<int, array{targetPath: string, relativePath: string, status: string, content: string, original: ?string}> $writes
+     */
+    private function applyWrites(array $writes): bool
+    {
+        $journal = [];
+
+        try {
+            foreach ($writes as $write) {
+                $journal[] = $write;
+                $this->writeChecked($write['targetPath'], $write['content']);
+            }
+        } catch (Throwable $exception) {
+            $rollbackErrors = [];
+
+            foreach (array_reverse($journal) as $write) {
+                try {
+                    if ($write['original'] === null) {
+                        if ($this->files->exists($write['targetPath']) && ! $this->files->delete($write['targetPath'])) {
+                            throw new RuntimeException('Suppression impossible.');
+                        }
+                    } else {
+                        $this->writeChecked($write['targetPath'], $write['original']);
+                    }
+                } catch (Throwable $rollbackException) {
+                    $rollbackErrors[] = $write['relativePath'].' : '.$rollbackException->getMessage();
+                }
+            }
+
+            $this->error('Installation interrompue : '.$exception->getMessage());
+
+            if ($rollbackErrors !== []) {
+                $this->error('Restauration incomplète : '.implode(' ; ', $rollbackErrors));
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private function writeChecked(string $path, string $content): void
+    {
+        if ($this->hasLinkedAncestor($path)) {
+            throw new RuntimeException('Lien symbolique dans la cible : '.$path);
+        }
+
+        $this->files->ensureDirectoryExists(dirname($path));
+        $written = $this->files->put($path, $content, true);
+
+        if ($written !== strlen($content)) {
+            throw new RuntimeException('Écriture incomplète : '.$path);
+        }
     }
 
     private function appendManagedBlock(string $existing): string

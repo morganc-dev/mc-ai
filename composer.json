@@ -4,17 +4,19 @@
   "type": "library",
   "license": "proprietary",
   "require": {
-    "php": "^8.5",
+    "php": "^8.2",
     "laravel/boost": "^2.2"
   },
   "require-dev": {
+    "laravel/framework": "^11.45.3|^12.41.1|^13.0",
     "symfony/yaml": "^7.0"
   },
   "scripts": {
-    "test": "@php tests/validate-resources.php"
+    "test": [
+      "@php tests/validate-resources.php",
+      "@php tests/install-command.php"
+    ]
   },
-  "minimum-stability": "stable",
-  "prefer-stable": true,
   "autoload": {
     "psr-4": {
       "MorgancDev\\McHarnessAi\\": "src/"
