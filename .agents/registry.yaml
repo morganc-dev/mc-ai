@@ -1,0 +1,38 @@
+schema_version: 1
+namespace: mc
+
+orchestration:
+  owner: main-agent
+  qualification_skill: mc-qualify-request
+  work_contract: .agents/contracts/work-unit.md
+  handoff_contract: .agents/contracts/handoff.md
+  review_contract: .agents/contracts/review.md
+
+roles:
+  mc-content-strategist:
+    purpose: Turn verified facts into useful, discoverable, conversion-oriented content.
+    instructions: .agents/roles/mc-content-strategist/ROLE.md
+    skills:
+      - mc-write-content
+
+  mc-digital-designer:
+    purpose: Define a visual direction and produce implementation-ready design deliverables.
+    instructions: .agents/roles/mc-digital-designer/ROLE.md
+    skills:
+      - mc-design-interface
+      - mc-apply-web-conventions
+
+  mc-laravel-developer:
+    purpose: Implement bounded, lean, and verified Laravel and web changes.
+    instructions: .agents/roles/mc-laravel-developer/ROLE.md
+    skills:
+      - mc-implement-laravel
+      - mc-apply-web-conventions
+
+  mc-reviewer:
+    purpose: Independently verify a delivery and return an evidence-based verdict.
+    instructions: .agents/roles/mc-reviewer/ROLE.md
+    skills:
+      - mc-review-delivery
+      - mc-security-review
+      - mc-apply-web-conventions
