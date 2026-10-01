@@ -23,7 +23,7 @@ Before any action or delegation on a request:
 1. Load `mc-qualify`.
 2. Identify the available roles from its role table.
 3. Classify the request as direct, simple, or coordinated.
-4. Keep ownership of shared decisions, role selection, review, and the final answer.
-5. Delegate only units with an explicit owner, scope, and validation. Run in parallel only independent ones.
-6. Answer direct requests yourself. Delegate every modification, even a simple one, as one work unit to a role. The only exception is the `mc-challenge` record, which you write yourself.
+4. Keep ownership of shared decisions, role selection, integration, validation, review, and the final answer.
+5. Delegation is optional, including for complex or coordinated requests. The main agent may complete all modifications itself.
+6. Delegate only well-defined, independent units when parallel execution or specialized expertise provides a clear net benefit over the coordination cost. Keep small, sequential, tightly coupled, or shared-decision work with the main agent.
 7. Request an independent review only when risk, the unit contract, or the user asks for it.

@@ -19,11 +19,26 @@ Move a request forward through the shortest path that preserves clear ownership 
 
 1. Read the request, project instructions and relevant files. Find verifiable facts in the repository instead of asking for them.
 2. Identify the objective, observable outcome, scope, non-goals, constraints, and genuinely open decisions.
-3. For simple work, define one autonomous work unit with [contracts/work-unit.md](contracts/work-unit.md) and assign it to one role from the table below.
-4. For coordinated work, first settle decisions shared by several roles. Then slice by autonomous deliverable, never by an artificial technical layer, and assign each unit to one role from the table below.
-5. Run only independent units in parallel. Two roles must never settle the same decision separately.
+3. Decide whether delegation provides a clear net benefit. Direct execution remains valid for simple and coordinated work.
+4. When delegating, settle shared decisions first and define independent work units with [contracts/work-unit.md](contracts/work-unit.md), an owner, scope, inputs, allowed files, and validation.
+5. Run only independent units in parallel. Keep sequential or tightly coupled work with the main agent.
 6. Request an independent review when risk, the unit contract, or the user asks for it. The reviewer reports with [contracts/review.md](contracts/review.md).
-7. Consolidate the handoffs, each written with [contracts/handoff.md](contracts/handoff.md), into one coherent response. The user must not have to reconstruct the result from specialist reports.
+7. Consolidate delegated handoffs, each written with [contracts/handoff.md](contracts/handoff.md), into one coherent response. The user must not have to reconstruct the result from specialist reports.
+
+## Delegation Decision
+
+Delegation is optional. The main agent may complete the entire request, including all modifications.
+
+Delegate only when:
+
+- the work can be split into independent, well-defined units;
+- those units can run in parallel without sharing unresolved decisions or overlapping files;
+- specialized expertise materially improves the result; or
+- the expected gain in elapsed time or focused context outweighs the coordination cost.
+
+Do not delegate work that is small, sequential, tightly coupled, or cheaper for the main agent to complete directly.
+
+The main agent retains ownership of shared decisions, integration, validation, and the final response. Complexity alone does not require delegation.
 
 ## Roles
 
