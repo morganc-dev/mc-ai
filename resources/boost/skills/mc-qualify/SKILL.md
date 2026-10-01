@@ -40,6 +40,8 @@ The main agent owns orchestration. A role is a set of instructions that the main
 
 Ask only for decisions that materially change the next steps. Group them into rounds and include a recommendation with its consequence. Information available in the repository, a supplied document, or a verifiable source is not a question to send back to the user.
 
+When many shared decisions remain open, suggest that the user run `/mc-challenge` instead of chaining rounds here. A `challenge-<subject>.md` record, when one exists, is the starting point of the qualification.
+
 ## Guardrails
 
 - The main agent does not silently perform work already assigned to another owner.

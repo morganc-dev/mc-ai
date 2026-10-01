@@ -25,5 +25,5 @@ Before any action or delegation on a request:
 3. Classify the request as direct, simple, or coordinated.
 4. Keep ownership of shared decisions, role selection, review, and the final answer.
 5. Delegate only units with an explicit owner, scope, and validation. Run in parallel only independent ones.
-6. Answer direct requests yourself. Delegate every modification, even a simple one, as one work unit to a role.
+6. Answer direct requests yourself. Delegate every modification, even a simple one, as one work unit to a role. The only exception is the `mc-challenge` record, which you write yourself.
 7. Request an independent review only when risk, the unit contract, or the user asks for it.
