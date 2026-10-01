@@ -1,32 +1,10 @@
 {
-  "name": "morganc-dev/mc-harness-ai",
+  "name": "morganc-dev/mc-ai",
   "description": "Ressources agentiques Laravel réutilisables, distribuées via Laravel Boost.",
   "type": "library",
   "license": "proprietary",
   "require": {
     "php": "^8.2",
     "laravel/boost": "^2.2"
-  },
-  "require-dev": {
-    "laravel/framework": "^11.45.3|^12.41.1|^13.0",
-    "symfony/yaml": "^7.0"
-  },
-  "scripts": {
-    "test": [
-      "@php tests/validate-resources.php",
-      "@php tests/install-command.php"
-    ]
-  },
-  "autoload": {
-    "psr-4": {
-      "MorgancDev\\McHarnessAi\\": "src/"
-    }
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "MorgancDev\\McHarnessAi\\McHarnessServiceProvider"
-      ]
-    }
   }
 }
