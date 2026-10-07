@@ -7,8 +7,9 @@ Objective and observable outcome:
 Scope:
 Out of scope:
 Inputs and sources of truth:
+Approved plan or settled decisions:
 Constraints:
-Allowed files:
+Files allowed to modify:
 Required validation:
 Dependencies:
 Escalate if:

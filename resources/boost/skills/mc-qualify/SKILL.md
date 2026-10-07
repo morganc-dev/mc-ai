@@ -12,18 +12,23 @@ Move a request forward through the shortest path that preserves clear ownership 
 ## Classification
 
 - **Direct**: an answer or diagnosis with no modification and no distinct specialist expertise.
-- **Simple**: a bounded, reversible modification with a single owner.
+- **Simple**: a bounded, reversible, low-risk modification with a single owner and no unresolved product, data, security, or architectural decision.
 - **Coordinated**: multiple domains, dependent deliverables, product decisions, architecture, security, sensitive data, significant cost, or low reversibility.
 
 ## Procedure
 
 1. Read the request, project instructions and relevant files. Find verifiable facts in the repository instead of asking for them.
-2. Identify the objective, observable outcome, scope, non-goals, constraints, and genuinely open decisions.
-3. Decide whether delegation provides a clear net benefit. Direct execution remains valid for simple and coordinated work.
-4. When delegating, settle shared decisions first and define independent work units with [contracts/work-unit.md](contracts/work-unit.md), an owner, scope, inputs, allowed files, and validation.
-5. Run only independent units in parallel. Keep sequential or tightly coupled work with the main agent.
-6. Request an independent review when risk, the unit contract, or the user asks for it. The reviewer reports with [contracts/review.md](contracts/review.md).
-7. Consolidate delegated handoffs, each written with [contracts/handoff.md](contracts/handoff.md), into one coherent response. The user must not have to reconstruct the result from specialist reports.
+2. Collect only the context needed to classify the request and avoid asking for facts the repository can establish. Inspect neighboring code and tests, local conventions, existing briefs or audits, the database schema when data is affected, and primary documentation for an uncertain or versioned API.
+3. Identify the objective, observable outcome, scope, non-goals, constraints, and genuinely open decisions.
+4. Ask only the questions whose answers materially change the behavior, scope, data, security boundary, architecture, or implementation plan. Do not ask for facts that the collected context can establish.
+5. For a direct request, answer or diagnose without producing an implementation plan.
+6. For a simple implementation request, state the intended outcome, affected area, and validation in a concise change proposal. Do not implement it until the user explicitly approves it.
+7. For a coordinated request, turn the settled facts and decisions into a concise plan: outcome, affected areas or files, ordered implementation steps, validation, risks, and remaining questions. Describe what will change, not code-level mechanics. Do not implement it until the user explicitly approves it.
+8. Decide whether delegation provides a clear net benefit. Direct execution remains valid for simple and coordinated work.
+9. When delegating, settle shared decisions first and define independent work units with [contracts/work-unit.md](contracts/work-unit.md), an owner, scope, inputs, files allowed to modify, and validation.
+10. Run only independent units in parallel. Keep sequential or tightly coupled work with the main agent.
+11. Request an independent review when risk, the unit contract, or the user asks for it. The reviewer reports with [contracts/review.md](contracts/review.md).
+12. Consolidate delegated handoffs, each written with [contracts/handoff.md](contracts/handoff.md), into one coherent response. The user must not have to reconstruct the result from specialist reports.
 
 ## Delegation Decision
 
@@ -53,9 +58,20 @@ The main agent owns orchestration. A role is a set of instructions that the main
 
 ## Questions
 
-Ask only for decisions that materially change the next steps. Group them into rounds and include a recommendation with its consequence. Information available in the repository, a supplied document, or a verifiable source is not a question to send back to the user.
+Ask only for decisions that materially change the behavior, scope, data, security boundary, architecture, or plan. Group them into rounds and include a recommendation with its consequence. Information available in the repository, a supplied document, or a verifiable source is not a question to send back to the user.
 
 When many shared decisions remain open, suggest that the user run `/mc-challenge` instead of chaining rounds here. A `challenge-<subject>.md` record, when one exists, is the starting point of the qualification.
+
+## Plan Format
+
+For a coordinated request, keep the plan concise and use this structure:
+
+1. **Summary**: the understood outcome in one or two sentences.
+2. **Affected areas**: files or components to create or modify, with their purpose when known.
+3. **Implementation steps**: ordered by dependency and expressed as observable changes, without pseudo-code, method signatures, or snippets.
+4. **Validation**: the checks that will demonstrate the behavior.
+5. **Attention points**: one sentence each for material risks, edge cases, or non-regression constraints.
+6. **Open questions**: only if a decision still prevents a reliable plan.
 
 ## Guardrails
 

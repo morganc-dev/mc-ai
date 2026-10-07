@@ -11,10 +11,13 @@ Checks performed:
 Limitations and unverified items:
 ```
 
+The verdict applies only to the stated scope and baseline.
+
 Every actionable finding includes:
 
 ```text
 Severity: defect | risk | improvement
+Priority: blocker | high | medium | low
 Location:
 Evidence:
 Consequence:
