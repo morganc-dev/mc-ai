@@ -8,7 +8,7 @@ description: Implement or fix bounded Laravel or web behavior with validation at
 ## Inputs
 
 - The request or an assigned work unit when one exists.
-- An explicitly approved implementation plan or concise change proposal.
+- An implementation plan or concise change proposal, either explicitly approved by the user or covered by an execution authorization established with `mc-qualify`.
 - Project instructions and local rules covering the affected files.
 - Content and design briefs when they exist.
 - Neighboring components, modules, and tests as prior art.
