@@ -1,22 +1,20 @@
-# Blade, Tailwind, and CSS Conventions
+# Tailwind and CSS Conventions
 
-## Default Stack
+These rules target Tailwind CSS v4. An established project strategy always wins.
 
-- Blade and Tailwind CSS v4 are the `mc-ai` defaults for a new project area. An established stack always wins.
-- No additional frontend framework or preprocessor without an explicit project decision.
+## Styling Strategies
 
-## Styling Strategy
+Three strategies are admitted. Follow the one the project already uses; a new area adopts the strategy of its neighbors.
 
-- Follow an established project strategy when it is clear and consistent.
-- When the project has no established strategy, semantic BEM classes in Blade composed with Tailwind utilities through `@apply` inside `@layer components` are the `mc-ai` default.
-- BEM classes use `block`, `block__element`, and `block--modifier`. Name them after the component's role, not its current visual appearance.
-- Keep Blade focused on structure and meaning. In the default BEM mode, do not place presentation utilities, arbitrary values, colors, or dimensions in markup.
-- Direct Tailwind utilities in Blade are a valid alternative only when the project already follows that strategy or the user explicitly chooses it.
-- Do not mix BEM plus `@apply` and direct presentation utilities within the same component. Structural hooks required by JavaScript or accessibility do not define a styling strategy.
+- **Utilities in templates**: Tailwind utilities written directly in Vue or Blade templates. This is the `mc-ai` default for a Vue project without an established strategy.
+- **BEM with `@apply`**: semantic `block`, `block__element`, and `block--modifier` classes named after the component's role, defined in `@layer components` and composed with `@apply`. Markup carries no presentation utility, arbitrary value, color, or dimension. This is the `mc-ai` default for a Blade project without an established strategy.
+- **Library components**: components from a library such as shadcn-vue keep their own styling and variant API. Extend them through that API and the theme tokens; do not rewrite their classes or reimplement them.
+
+Do not mix strategies within one component. Structural hooks required by JavaScript or accessibility do not define a styling strategy. Never impose BEM on Vue components, and never forbid utilities in templates where the project uses them.
 
 ## Theme and Scale
 
-- `app.css` is the single entry point: the theme, imports, and components must all be traceable from it.
+- The CSS entry point, `app.css` or the project's equivalent, is unique: the theme, imports, and components must all be traceable from it.
 - Shared design values live in `@theme` as semantic tokens: colors, radii, spacing, shadows, typography, and motion.
 - Use Tailwind's spacing, sizing, typography, radius, and breakpoint scales before extending them.
 - Extend `@theme` only when a repeated semantic value genuinely belongs to the project's design system. Do not create a token merely to preserve one measurement from a mockup.
@@ -32,14 +30,8 @@
 
 ## Component CSS
 
-- Define BEM component classes in `@layer components` and compose them primarily with `@apply` from Tailwind utilities and theme tokens.
+- In the BEM strategy, define component classes in `@layer components` and compose them primarily with `@apply` from Tailwind utilities and theme tokens.
 - Use native CSS declarations only for behavior that Tailwind utilities or `@apply` cannot express cleanly, such as complex masks, `clip-path`, pseudo-elements, or specialized animations.
 - Keep native declarations adjacent to the component they support and express their colors and reusable values through theme tokens or CSS variables.
-- Import every separate CSS file from `app.css`.
+- Import every separate CSS file from the CSS entry point.
 - A component whose width depends on its insertion context uses container queries, not viewport breakpoints.
-
-## Blade
-
-- Name view and component files and folders in kebab-case.
-- Reuse an existing component before adding duplicated markup.
-- Keep business logic out of views.

@@ -13,7 +13,7 @@ Le dossier `resources/boost/skills/` contient huit skills. Boost les copie dans 
 | `mc-challenge`   | Challenger un besoin par rondes de questions jusqu'à trancher chaque décision. Le compte rendu `challenge-{sujet}.md` sert d'entrée à `mc-qualify`. Ce skill se lance uniquement à la demande. |
 | `mc-qualify`     | Qualifier une demande, établir si son exécution est déjà autorisée, choisir entre exécution directe et délégation, définir les unités de travail. Il porte aussi les rôles et les contrats. |
 | `mc-dev`         | Implémenter un changement Laravel ou web borné et vérifié.                                                                                     |
-| `mc-conventions` | Conventions PHP, Blade, Tailwind, JavaScript et tests.                                                                                         |
+| `mc-conventions` | Conventions PHP, Blade, Vue, TypeScript, JavaScript, Tailwind, coque mobile native et tests, chargées selon la stack réelle du projet.          |
 | `mc-design`      | Direction visuelle et livrables de design prêts à implémenter.                                                                                 |
 | `mc-content`     | Fiche produit, brief de page, contenu, SEO on-page et conversion.                                                                              |
 | `mc-review`      | Revue indépendante d'une livraison, sans modifier la cible.                                                                                    |

@@ -66,7 +66,7 @@ The main agent owns orchestration. A role is a set of instructions that the main
 | Role | Purpose | Instructions | Skills |
 |---|---|---|---|
 | mc-laravel-developer | Implement bounded, lean, and verified Laravel and web changes. | [roles/mc-laravel-developer.md](roles/mc-laravel-developer.md) | mc-dev, mc-conventions |
-| mc-digital-designer | Define a visual direction and produce implementation-ready design deliverables. | [roles/mc-digital-designer.md](roles/mc-digital-designer.md) | mc-design, mc-conventions for Blade or Tailwind |
+| mc-digital-designer | Define a visual direction and produce implementation-ready design deliverables. | [roles/mc-digital-designer.md](roles/mc-digital-designer.md) | mc-design, mc-conventions for Blade, Vue, or Tailwind |
 | mc-content-strategist | Turn verified facts into useful, discoverable, conversion-oriented content. | [roles/mc-content-strategist.md](roles/mc-content-strategist.md) | mc-content |
 | mc-reviewer | Independently verify a delivery and return an evidence-based verdict. | [roles/mc-reviewer.md](roles/mc-reviewer.md) | mc-review, mc-security when a security boundary is involved, mc-conventions |
 

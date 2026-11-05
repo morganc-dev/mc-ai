@@ -22,7 +22,7 @@ description: Implement or fix bounded Laravel or web behavior with validation at
 5. Choose the highest public seam where the behavior is observable: route, service, rendered view, or browser interaction.
 6. Implement the smallest change that fully delivers the behavior. Prefer a vertical slice over layer-by-layer construction.
 7. Add or adapt a test when the behavior or contract justifies one. Do not test guarantees already provided by the framework.
-8. Run the narrowest validations during development, then proportionate final checks: relevant tests, static analysis and formatting for PHP, build and browser pass for interface work.
+8. Run the narrowest validations during development, then proportionate final checks: relevant tests, the project's static analysis, type checking and formatting, build and browser pass for interface work.
 9. Visually verify interface changes and inspect the console. State precisely what could not be run.
 10. Report the outcome, files changed, validation, assumptions, residual risks and unverified items.
 
