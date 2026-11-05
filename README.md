@@ -4,7 +4,7 @@ Conventions, procédures et rôles réutilisables pour mes projets Laravel, dist
 
 ## Contenu
 
-Le dossier `resources/boost/guidelines/` contient `core.md`. Boost l'injecte dans le fichier d'instructions de chaque agent sélectionné, `AGENTS.md` ou `CLAUDE.md` selon l'outil. Il fixe les frontières de responsabilité, la langue de travail, la discipline de changement et les sept étapes d'orchestration.
+Le dossier `resources/boost/guidelines/` contient `core.md`. Boost l'injecte dans le fichier d'instructions de chaque agent sélectionné, `AGENTS.md` ou `CLAUDE.md` selon l'outil. Il fixe les frontières de responsabilité, la langue de travail, la discipline de changement et renvoie à `mc-qualify` pour l'orchestration.
 
 Le dossier `resources/boost/skills/` contient huit skills. Boost les copie dans le dossier de skills de chaque agent.
 

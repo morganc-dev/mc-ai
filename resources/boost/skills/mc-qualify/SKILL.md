@@ -31,13 +31,13 @@ When the authorization is ambiguous, fall back to the interactive mode.
 ## Procedure
 
 1. Read the request, project instructions and relevant files. Find verifiable facts in the repository instead of asking for them.
-2. Collect only the context needed to classify the request and avoid asking for facts the repository can establish. Inspect neighboring code and tests, local conventions, existing briefs or audits, the database schema when data is affected, and primary documentation for an uncertain or versioned API.
+2. Collect only the context needed to classify the request. Inspect neighboring code and tests, local conventions, existing briefs or audits, the database schema when data is affected, and primary documentation for an uncertain or versioned API.
 3. Identify the objective, observable outcome, scope, non-goals, constraints, and genuinely open decisions.
 4. Establish the execution mode from the sources listed in [Execution Authorization](#execution-authorization) before deciding what to ask.
-5. Ask only the questions whose answers materially change the behavior, scope, data, security boundary, architecture, or implementation plan. Do not ask for facts that the collected context can establish.
+5. Ask the remaining open decisions as described in [Questions](#questions).
 6. For a direct request, answer or diagnose without producing an implementation plan.
-7. For a simple implementation request, state the intended outcome, affected area, and validation in a concise change proposal. In interactive mode, do not implement it until the user explicitly approves it.
-8. For a coordinated request, turn the settled facts and decisions into a concise plan: outcome, affected areas or files, ordered implementation steps, validation, risks, and remaining questions. Describe what will change, not code-level mechanics. In interactive mode, do not implement it until the user explicitly approves it.
+7. For a simple implementation request, state the intended outcome, affected area, and validation in a concise change proposal.
+8. For a coordinated request, turn the settled facts and decisions into a plan that follows [Plan Format](#plan-format).
 9. Decide whether delegation provides a clear net benefit. Direct execution remains valid for simple and coordinated work.
 10. When delegating, settle shared decisions first and define independent work units with [contracts/work-unit.md](contracts/work-unit.md), an owner, scope, inputs, files allowed to modify, and validation.
 11. Run only independent units in parallel. Keep sequential or tightly coupled work with the main agent.
@@ -82,7 +82,7 @@ For a coordinated request, keep the plan concise and use this structure:
 
 1. **Summary**: the understood outcome in one or two sentences.
 2. **Affected areas**: files or components to create or modify, with their purpose when known.
-3. **Implementation steps**: ordered by dependency and expressed as observable changes, without pseudo-code, method signatures, or snippets.
+3. **Implementation steps**: ordered by dependency and expressed as observable changes, not code-level mechanics: no pseudo-code, method signatures, or snippets.
 4. **Validation**: the checks that will demonstrate the behavior.
 5. **Attention points**: one sentence each for material risks, edge cases, or non-regression constraints.
 6. **Open questions**: only if a decision still prevents a reliable plan.
