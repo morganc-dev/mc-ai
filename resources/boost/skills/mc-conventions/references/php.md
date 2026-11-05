@@ -2,7 +2,6 @@
 
 ## Naming
 
-- Use English for every code identifier: classes, interfaces, traits, enums, methods, functions, properties, variables, constants, routes, events, jobs, configuration keys, tables, columns, foreign keys, and pivot tables.
 - Follow Laravel's English naming conventions so framework defaults apply without manual overrides. Examples: `getActiveReservations()`, `isInvoicePaid()`, `ReservationFactory`, `StoreOrderRequest`.
 - Name classes after their domain responsibility and methods or functions after the behavior they perform. Assess a method name together with its enclosing class: `handle()` is appropriate when the class name already expresses the domain action. The resulting call must remain clear at its call site and distinguish its intent from nearby alternatives; avoid vague names such as `data` or `helper` when a domain-specific name is available.
 - Prefix private methods with `_` only when the project already follows this convention or when creating a new isolated area. This is an `mc-ai` default, not a Laravel convention; never retrofit it into an established codebase.

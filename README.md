@@ -4,16 +4,16 @@ Conventions, procédures et rôles réutilisables pour mes projets Laravel, dist
 
 ## Contenu
 
-Le dossier `resources/boost/guidelines/` contient `core.md`. Boost l'injecte dans le fichier d'instructions de chaque agent sélectionné, `AGENTS.md` ou `CLAUDE.md` selon l'outil. Il fixe les frontières de responsabilité, la langue de travail, la discipline de changement et les sept étapes d'orchestration.
+Le dossier `resources/boost/guidelines/` contient `core.md`. Boost l'injecte dans le fichier d'instructions de chaque agent sélectionné, `AGENTS.md` ou `CLAUDE.md` selon l'outil. Il fixe les frontières de responsabilité, la langue de travail, la discipline de changement et renvoie à `mc-qualify` pour l'orchestration.
 
 Le dossier `resources/boost/skills/` contient huit skills. Boost les copie dans le dossier de skills de chaque agent.
 
 | Skill            | Usage                                                                                                                                          |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mc-challenge`   | Challenger un besoin par rondes de questions jusqu'à trancher chaque décision. Le compte rendu `challenge-{sujet}.md` sert d'entrée à `mc-qualify`. Ce skill se lance uniquement à la demande. |
-| `mc-qualify`     | Qualifier une demande, choisir entre exécution directe et délégation, définir les unités de travail. Il porte aussi les rôles et les contrats. |
+| `mc-qualify`     | Qualifier une demande, établir si son exécution est déjà autorisée, choisir entre exécution directe et délégation, définir les unités de travail. Il porte aussi les rôles et les contrats. |
 | `mc-dev`         | Implémenter un changement Laravel ou web borné et vérifié.                                                                                     |
-| `mc-conventions` | Conventions PHP, Blade, Tailwind, JavaScript et tests.                                                                                         |
+| `mc-conventions` | Conventions PHP, Blade, Vue, TypeScript, JavaScript, Tailwind, coque mobile native et tests, chargées selon la stack réelle du projet.          |
 | `mc-design`      | Direction visuelle et livrables de design prêts à implémenter.                                                                                 |
 | `mc-content`     | Fiche produit, brief de page, contenu, SEO on-page et conversion.                                                                              |
 | `mc-review`      | Revue indépendante d'une livraison, sans modifier la cible.                                                                                    |

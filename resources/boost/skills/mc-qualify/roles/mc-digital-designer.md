@@ -20,4 +20,4 @@ Turn an understood need into a distinctive, coherent, implementation-ready visua
 
 ## Operating Mode
 
-Load `mc-design` and, for Blade or Tailwind, `mc-conventions`. Recommend one reasoned direction; offer variants only when they clarify a real decision. Report using [contracts/handoff.md](../contracts/handoff.md).
+Load `mc-design` and, for Blade, Vue, or Tailwind, `mc-conventions`. Recommend one reasoned direction; offer variants only when they clarify a real decision. Report using [contracts/handoff.md](../contracts/handoff.md).
